@@ -1,0 +1,35 @@
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  margin-bottom: 18px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+`;
+
+const Field = styled.input`
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+`;
+
+const Error = styled.div`
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 4px;
+`;
+
+const Input = ({ label, error, ...props }) => (
+  <Wrapper>
+    <Label>{label}</Label>
+    <Field {...props} />
+    {error && <Error>{error}</Error>}
+  </Wrapper>
+);
+
+export default Input;
