@@ -1,15 +1,13 @@
 import React from 'react';
-import { FaClipboardList, FaBriefcase, FaStore, FaCog, FaHandshake, FaPowerOff, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft } from 'react-icons/fa';
+import { FaBriefcase, FaPowerOff } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import menuIcon from '../assets/menu.png';
 import { FaTachometerAlt } from 'react-icons/fa';
 
 const sidebarItems = [
   { label: 'Dashboard', icon: <FaTachometerAlt />, path: '/dashboard' },
-  { label: 'Affaires', icon: <FaBriefcase />, path: '/affaires' },
-  { label: 'Marketplace', icon: <FaStore />, path: '/marketplace' },
-  { label: 'Paramètres', icon: <FaCog />, path: '/parametres' },
-  { label: 'parrainage', icon: <FaHandshake />, path: '/parrainage' },
+  { label: 'cv parsing', icon: <FaBriefcase />, path: '/cv-parsing' },
 ];
 
 export default function Sidebar() {
