@@ -3,3 +3,8 @@ uvicorn
 pymongo
 pydantic
 python-jose[cryptography]
+langchain
+google-generativeai
+python-dotenv
+sentence-transformers
+faiss-cpu

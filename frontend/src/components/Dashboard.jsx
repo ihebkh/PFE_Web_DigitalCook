@@ -10,12 +10,12 @@ export default function Dashboard() {
 
       <main style={{ marginLeft: 220, marginTop: 64, padding: 32 }}>
         <iframe 
-          width="100%" 
-          height="800" 
-          src="https://app.powerbi.com/reportEmbed?reportId=8a548be8-682a-456a-8c76-a8849eccb6d6&autoAuth=true&ctid=604f1a96-cbe8-43f8-abbf-f8eaf5d85730" 
+          title="Dashboard" 
+          width="1100" 
+          height="700" 
+          src="https://app.powerbi.com/reportEmbed?reportId=65d99be3-92af-4c86-b4b5-24981f6a0508&pageName=ReportSection&autoAuth=true&ctid=604f1a96-cbe8-43f8-abbf-f8eaf5d85730&navContentPaneEnabled=false&filterPaneEnabled=false" 
           frameBorder="0" 
-          allowFullScreen={true}
-          title="Description du contenu de l'iframe"
+          allowFullScreen="true"
         ></iframe>
       </main>
     </div>
