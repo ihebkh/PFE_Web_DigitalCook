@@ -3,6 +3,7 @@ import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import AppRouter from './routes/AppRouter.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AuthProvider } from './context/authContext.jsx';
 
 const theme = createTheme({
   palette: {
@@ -19,8 +20,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppRouter />
-      <ToastContainer />
+      <AuthProvider>
+        <AppRouter />
+        <ToastContainer />
+      </AuthProvider>
+
     </ThemeProvider>
   );
 }

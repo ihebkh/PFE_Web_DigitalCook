@@ -8,3 +8,4 @@ google-generativeai
 python-dotenv
 sentence-transformers
 faiss-cpu
+passlib[bcrypt]

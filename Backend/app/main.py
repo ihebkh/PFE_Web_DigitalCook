@@ -17,3 +17,4 @@ app.add_middleware(
 )
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(cv_ocr.router, prefix="/cv", tags=["cv"])
+

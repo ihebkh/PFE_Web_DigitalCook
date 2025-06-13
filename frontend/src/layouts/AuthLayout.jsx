@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React from 'react';
-import logoTalentxpo from '../assets/logo-talentxpo.png'; // adapte le chemin et l'extension si besoin
+import logoTalentxpo from '../assets/Talentxpo-full-logo-ffa0fdc2.jpg'; // adapte le chemin et l'extension si besoin
 
 const Background = styled.div`
   min-height: 100vh;

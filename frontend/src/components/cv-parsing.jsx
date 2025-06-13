@@ -3,10 +3,9 @@ import { Box, Button, Typography, Paper, CircularProgress, Grid } from '@mui/mat
 import { toast } from 'react-toastify';
 import { cvParsingService } from '../service/cv/cv-parsing';
 import Header from './Header';
-import Sidebar from './Sidebar';
 import { useDropzone } from 'react-dropzone';
 
-const CVParsing = () => {
+const CVParsing = ({ collapsed }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [matches, setMatches] = useState(null);
@@ -60,11 +59,20 @@ const CVParsing = () => {
     setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
   };
 
+  const marginLeft = collapsed ? 90 : 270;
+
   return (
     <div>
       <Header />
-      <Sidebar />
-      <Box sx={{ marginLeft: '240px', p: 3, flexGrow: 1 }}>
+      <Box sx={{
+        marginLeft: `${marginLeft}px`,
+        p: 3,
+        flexGrow: 1,
+        transition: 'margin-left 0.2s',
+        width: `calc(100% - ${marginLeft}px)`,
+        minHeight: 'calc(100vh - 64px - 64px)',
+        overflow: 'auto'
+      }}>
 
         <br></br>
         <br></br>
