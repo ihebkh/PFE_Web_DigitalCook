@@ -3,7 +3,9 @@ import { FaChevronLeft } from 'react-icons/fa';
 import { FaBriefcase } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import menuIcon from '../assets/menu.png';
-import { FaTachometerAlt, FaClipboardList, FaBuilding, FaStore, FaCog, FaHandshake } from 'react-icons/fa';
+import { FaTachometerAlt, FaClipboardList, FaBuilding, FaStore, FaCog, FaHandshake, FaSun, FaMoon } from 'react-icons/fa';
+import { useTheme } from '../context/themeContext';
+import { useAuth } from '../context/authContext';
 
 const sidebarItems = [
   { label: 'Dashboard', icon: <FaTachometerAlt />, path: '/dashboard' },
@@ -18,18 +20,26 @@ const sidebarItems = [
 export default function Sidebar({ collapsed, toggleSidebar }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { isDarkMode, toggleTheme } = useTheme();
+  const { user } = useAuth();
   const iconSize = collapsed ? 28 : 20;
+
+  const getPhotoSrc = (url) => {
+    if (!url) return 'https://i.pravatar.cc/150?u=default';
+    if (url.startsWith('/uploads/')) return 'http://localhost:8000' + url;
+    return url;
+  };
 
   return (
     <aside
       style={{
         width: collapsed ? 60 : 220,
-        background: '#fff',
+        background: isDarkMode ? '#1E2B45' : '#fff',
         height: '100vh',
         position: 'fixed',
         top: 64,
         left: 0,
-        borderRight: '1px solid #eee',
+        borderRight: `1px solid ${isDarkMode ? '#404B60' : '#eee'}`,
         paddingTop: 24,
         zIndex: 99,
         display: 'flex',
@@ -79,7 +89,7 @@ export default function Sidebar({ collapsed, toggleSidebar }) {
             minWidth: collapsed ? 48 : undefined,
             maxWidth: collapsed ? 48 : undefined,
             background: location.pathname === item.path ? '#0D52CE' : 'transparent',
-            color: location.pathname === item.path ? '#fff' : '#0a4a8a',
+            color: location.pathname === item.path ? '#fff' : isDarkMode ? '#F0F0F0' : '#0a4a8a',
             border: 'none',
             borderRadius: 8,
             fontWeight: 500,
@@ -94,72 +104,37 @@ export default function Sidebar({ collapsed, toggleSidebar }) {
           {!collapsed && <span style={{ marginLeft: 12 }}>{item.label}</span>}
         </button>
       ))}
+
+      <button
+        onClick={toggleTheme}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: collapsed ? 0 : 12,
+          justifyContent: collapsed ? 'center' : 'flex-start',
+          padding: collapsed ? 0 : '12px 24px',
+          height: 48,
+          width: collapsed ? 48 : '100%',
+          minWidth: collapsed ? 48 : undefined,
+          maxWidth: collapsed ? 48 : undefined,
+          background: 'transparent',
+          color: isDarkMode ? '#F0F0F0' : '#0a4a8a',
+          border: 'none',
+          borderRadius: 8,
+          fontWeight: 500,
+          fontSize: 16,
+          cursor: 'pointer',
+          transition: 'background 0.2s, color 0.2s, width 0.2s',
+          margin: '0 8px',
+          marginBottom: 4,
+        }}
+      >
+        {isDarkMode ? <FaSun size={iconSize} /> : <FaMoon size={iconSize} />}
+        {!collapsed && <span style={{ marginLeft: 12 }}>{isDarkMode ? 'Mode Clair' : 'Mode Sombre'}</span>}
+      </button>
+
       <div style={{ width: '100%' }}>
         {/* Remove user display and logout button */}
-        {/*
-        {user && (
-          <button
-            onClick={() => setShowLogout(!showLogout)}
-            style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: collapsed ? 0 : 12,
-            justifyContent: collapsed ? 'center' : 'flex-start',
-            padding: collapsed ? 0 : '12px 24px',
-            height: 48,
-            width: collapsed ? 48 : '100%',
-            minWidth: collapsed ? 48 : undefined,
-            maxWidth: collapsed ? 48 : undefined,
-            background:'transparent',
-            color: '#0a4a8a',
-            border: 'none',
-            borderRadius: 8,
-            fontWeight: 500,
-            fontSize: 16,
-            cursor: 'pointer',
-            transition: 'background 0.2s, color 0.2s, width 0.2s',
-            margin: '0 8px',
-            marginBottom: 4,
-          }}
-          >
-            
-            <FaUserCircle size={iconSize} style={{ flexShrink: 0, width: 22, height: 22 }} />
-            {!collapsed && (
-              <span style={{ marginLeft: 9, lineHeight: '48px' }}>
-                {user.prenom} {user.nom}
-              </span>
-            )}
-          </button>
-        )}
-
-        {showLogout && !collapsed && (
-          <button
-            onClick={handleLogout}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              justifyContent: 'flex-start',
-              padding: '10px 24px',
-              background: 'transparent',
-              color: 'red',
-              border: 'none',
-              borderRadius: 8,
-              fontWeight: 500,
-              fontSize: 16,
-              cursor: 'pointer',
-              width: '100%',
-              marginTop: 4,
-              boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-              boxSizing: 'border-box',
-              lineHeight: '28px',
-            }}
-          >
-            <FaPowerOff size={iconSize} style={{ flexShrink: 0, marginLeft: 9, lineHeight: '48px' }} />
-            <span>Déconnexion</span>
-          </button>
-        )}
-        */}
       </div>
     </aside>
   );

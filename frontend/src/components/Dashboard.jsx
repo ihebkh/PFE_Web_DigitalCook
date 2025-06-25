@@ -1,8 +1,10 @@
 import React from 'react';
 import Header from './Header';
+import { useTheme } from '../context/themeContext';
 
 export default function Dashboard({ collapsed }) {
   const marginLeft = collapsed ? 90 : 270;
+  const { isDarkMode } = useTheme();
 
   return (
     <div>
@@ -15,7 +17,9 @@ export default function Dashboard({ collapsed }) {
         transition: 'margin-left 0.2s',
         width: `calc(100% - ${marginLeft}px)`,
         height: 'calc(100vh - 64px - 64px)',
-        overflow: 'auto'
+        overflow: 'auto',
+        background: isDarkMode ? '#1E2B45' : '#fff',
+        color: isDarkMode ? '#F0F0F0' : '#333',
       }}>
         <iframe 
           title="Dashboard" 

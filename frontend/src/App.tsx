@@ -1,9 +1,10 @@
 import React from 'react';
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { CssBaseline, ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material';
 import AppRouter from './routes/AppRouter.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './context/authContext.jsx';
+import { ThemeProvider } from './context/themeContext';
 
 const theme = createTheme({
   palette: {
@@ -18,14 +19,15 @@ const theme = createTheme({
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AuthProvider>
-        <AppRouter />
-        <ToastContainer />
-      </AuthProvider>
-
-    </ThemeProvider>
+    <MuiThemeProvider theme={theme}>
+      <ThemeProvider>
+        <CssBaseline />
+        <AuthProvider>
+          <AppRouter />
+          <ToastContainer />
+        </AuthProvider>
+      </ThemeProvider>
+    </MuiThemeProvider>
   );
 }
 

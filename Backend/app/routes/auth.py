@@ -1,12 +1,16 @@
-from fastapi import APIRouter, HTTPException, Response, Cookie, Depends, Request
+from fastapi import APIRouter, HTTPException, Response, Cookie, Depends, Request, UploadFile, File
 from app.db.mongo import get_mongo_collections
 from typing import Optional
 from app.schemas.user import UserAuth, UserProfileUpdate
 from app.crud.user import authenticate_user
 from bson import ObjectId
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+import os
 
 router = APIRouter()
+
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../uploads')
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 def create_session_cookie(response: Response, email: str):
     response.set_cookie(
@@ -49,7 +53,8 @@ def login(user: UserAuth, response: Response):
         "nom": db_user.get("last_name"),
         "prenom": db_user.get("name"),
         "email": db_user.get("email"),
-        "role": role_label
+        "role": role_label,
+        "photo_url": db_user.get("photo_url")
     }
     
 @router.get("/current_user")
@@ -57,7 +62,8 @@ def get_current_user(current_user: dict = Depends(get_current_active_user)):
     return {
         "nom": current_user.get("last_name"),
         "prenom": current_user.get("name"),
-        "email": current_user.get("email")
+        "email": current_user.get("email"),
+        "photo_url": current_user.get("photo_url")
     }
     
 @router.get("/logout")
@@ -85,6 +91,10 @@ def update_profile(user_update: UserProfileUpdate, current_user: dict = Depends(
             raise HTTPException(status_code=400, detail="Cet email est déjà utilisé.")
         update_fields["email"] = user_update.email
     
+    # Update photo_url
+    if user_update.photo_url is not None:
+        update_fields["photo_url"] = user_update.photo_url
+    
     # Password change logic (reverted to plain text)
     if user_update.new_password:
         if not user_update.current_password:
@@ -103,6 +113,7 @@ def update_profile(user_update: UserProfileUpdate, current_user: dict = Depends(
     if not update_fields:
         raise HTTPException(status_code=400, detail="Aucune information à mettre à jour.")
 
+    print('update_fields:', update_fields)  # DEBUG
     users_col.update_one({"_id": user_id}, {"$set": update_fields})
     
     # Fetch updated user to return latest data (especially if email changed for session cookie)
@@ -112,6 +123,20 @@ def update_profile(user_update: UserProfileUpdate, current_user: dict = Depends(
         return {
             "nom": updated_user_doc.get("last_name"),
             "prenom": updated_user_doc.get("name"),
-            "email": updated_user_doc.get("email")
+            "email": updated_user_doc.get("email"),
+            "photo_url": updated_user_doc.get("photo_url")
         }
     raise HTTPException(status_code=500, detail="Échec de la récupération de l'utilisateur mis à jour.")
+
+@router.post("/upload_photo")
+def upload_photo(file: UploadFile = File(...), current_user: dict = Depends(get_current_active_user)):
+    _, users_col, _, _, _ = get_mongo_collections()
+    user_id = current_user["_id"]
+    filename = f"user_{str(user_id)}_{file.filename}"
+    file_path = os.path.join(UPLOAD_DIR, filename)
+    with open(file_path, "wb") as buffer:
+        buffer.write(file.file.read())
+    # Construire l'URL d'accès à la photo
+    photo_url = f"/uploads/{filename}"
+    users_col.update_one({"_id": user_id}, {"$set": {"photo_url": photo_url}})
+    return {"photo_url": photo_url}

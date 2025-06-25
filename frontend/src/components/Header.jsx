@@ -1,19 +1,27 @@
 import React from 'react';
 import logoTalentxpo from '../assets/logo-talentxpo.png';
-import { FaEllipsisV, FaPowerOff, FaUserEdit, FaUserCircle } from 'react-icons/fa';
+import { FaEllipsisV, FaPowerOff, FaUserEdit, FaUserCircle, FaSun, FaMoon } from 'react-icons/fa';
 import { useAuth } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTheme } from '../context/themeContext';
 
 export default function Header() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showLogout, setShowLogout] = React.useState(false);
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     logout();
     toast.info('Déconnexion réussie.');
     navigate('/');
+  };
+
+  const getPhotoSrc = (url) => {
+    if (!url) return 'https://i.pravatar.cc/150?u=default';
+    if (url.startsWith('/uploads/')) return 'http://localhost:8000' + url;
+    return url;
   };
 
   return (
@@ -53,7 +61,11 @@ export default function Header() {
               transition: 'background 0.2s',
             }}
           >
-            <FaUserCircle size={22} />
+            {user.photo_url ? (
+              <img src={getPhotoSrc(user.photo_url)} alt="avatar" style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', background: '#fff' }} />
+            ) : (
+              <FaUserCircle size={22} />
+            )}
             <span>
               {user.prenom} {user.nom}
             </span>
@@ -67,21 +79,17 @@ export default function Header() {
               position: 'absolute',
               top: '100%',
               right: 0,
-              marginTop: 5,
               background: '#fff',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
               borderRadius: 8,
-              boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-              minWidth: '150px',
-              overflow: 'hidden',
+              minWidth: 180,
+              zIndex: 101,
+              padding: '8px 0',
             }}
           >
             <button
-              onClick={() => {
-                navigate('/profile');
-                setShowLogout(false);
-              }}
+              onClick={() => navigate('/profile')}
               style={{
-                width: '100%',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
@@ -91,36 +99,72 @@ export default function Header() {
                 cursor: 'pointer',
                 fontSize: 16,
                 fontWeight: 500,
-                padding: '10px 15px',
+                width: '100%',
+                padding: '10px 16px',
                 textAlign: 'left',
-                transition: 'background 0.2s',
+                '&:hover': { background: '#f0f0f0' },
               }}
             >
               <FaUserEdit size={18} />
-              <span>Edit Profile</span>
+              <span>Mon Profil</span>
             </button>
             <button
-              onClick={handleLogout}
+              onClick={toggleTheme}
               style={{
-                width: '100%',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
                 background: 'transparent',
                 border: 'none',
-                color: 'red',
+                color: '#333',
                 cursor: 'pointer',
                 fontSize: 16,
                 fontWeight: 500,
-                padding: '10px 15px',
+                width: '100%',
+                padding: '10px 16px',
                 textAlign: 'left',
-                transition: 'background 0.2s',
+                '&:hover': { background: '#f0f0f0' },
+              }}
+            >
+              {isDarkMode ? <FaSun size={18} /> : <FaMoon size={18} />}
+              <span>{isDarkMode ? 'Mode Clair' : 'Mode Sombre'}</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                background: 'transparent',
+                border: 'none',
+                color: '#d32f2f',
+                cursor: 'pointer',
+                fontSize: 16,
+                fontWeight: 500,
+                width: '100%',
+                padding: '10px 16px',
+                textAlign: 'left',
+                '&:hover': { background: '#ffebee' },
               }}
             >
               <FaPowerOff size={18} />
               <span>Déconnexion</span>
             </button>
           </div>
+        )}
+
+        {showLogout && (
+          <div
+            onClick={() => setShowLogout(false)}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 100,
+            }}
+          />
         )}
       </div>
     </header>

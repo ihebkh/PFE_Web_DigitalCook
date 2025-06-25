@@ -11,3 +11,4 @@ class UserProfileUpdate(BaseModel):
     email: Optional[EmailStr] = None
     current_password: Optional[str] = None
     new_password: Optional[str] = None
+    photo_url: Optional[str] = None

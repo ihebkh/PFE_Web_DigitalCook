@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
         try {
             const res = await loginService(email, password);
             if (res.status === 'valide') {
-                const loggedUser = { nom: res.nom, prenom: res.prenom, email: res.email, role:res.role };
+                const loggedUser = { nom: res.nom, prenom: res.prenom, email: res.email, role: res.role, photo_url: res.photo_url };
                 setUser(loggedUser);
                 localStorage.setItem('user', JSON.stringify(loggedUser));
                 return true;

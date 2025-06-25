@@ -39,3 +39,13 @@ export async function updateUserProfile(userData) {
     throw new Error(err.response?.data?.detail || 'Erreur lors de la mise à jour du profil');
   }
 }
+
+export async function uploadProfilePhoto(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await axios.post(`${api_url}/auth/upload_photo`, formData, {
+    withCredentials: true,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+  return res.data.photo_url;
+}
