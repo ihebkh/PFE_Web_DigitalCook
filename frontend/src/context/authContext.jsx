@@ -4,7 +4,10 @@ import { login as loginService, getCurrentUser, logout as logoutService, updateU
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(() => {
+        const stored = localStorage.getItem('user');
+        return stored ? JSON.parse(stored) : null;
+    });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 

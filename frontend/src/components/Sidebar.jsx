@@ -1,34 +1,24 @@
 import React from 'react';
-import { FaChevronLeft } from 'react-icons/fa';
-import { FaBriefcase } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import menuIcon from '../assets/menu.png';
-import { FaTachometerAlt, FaClipboardList, FaBuilding, FaStore, FaCog, FaHandshake, FaSun, FaMoon } from 'react-icons/fa';
+import { FaChevronLeft, FaBriefcase, FaTachometerAlt, FaClipboardList, FaBuilding, FaStore, FaCog, FaHandshake, FaSun, FaMoon, FaUsers } from 'react-icons/fa';
 import { useTheme } from '../context/themeContext';
-import { useAuth } from '../context/authContext';
 
 const sidebarItems = [
   { label: 'Dashboard', icon: <FaTachometerAlt />, path: '/dashboard' },
   { label: 'Talentxpo', icon: <FaBriefcase />, path: '/cv-parsing' },
-  { label: 'Activités', icon: <FaClipboardList />, path: '' },
-  { label: 'Affaires', icon: <FaBuilding />, path: '' },
-  { label: 'Marketplace', icon: <FaStore />, path: '' },
-  { label: 'Paramètres', icon: <FaCog />, path: '' },
-  { label: 'Parrainage', icon: <FaHandshake />, path: '' },
+  { label: 'Activités', icon: <FaClipboardList />, path: '/activities' },
+  { label: 'Affaires', icon: <FaBuilding />, path: '/affaires' },
+  { label: 'Marketplace', icon: <FaStore />, path: '/marketplace' },
+  { label: 'Paramètres', icon: <FaCog />, path: '/settings' },
+  { label: 'Parrainage', icon: <FaHandshake />, path: '/referral' },
 ];
 
 export default function Sidebar({ collapsed, toggleSidebar }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { isDarkMode, toggleTheme } = useTheme();
-  const { user } = useAuth();
   const iconSize = collapsed ? 28 : 20;
-
-  const getPhotoSrc = (url) => {
-    if (!url) return 'https://i.pravatar.cc/150?u=default';
-    if (url.startsWith('/uploads/')) return 'http://localhost:8000' + url;
-    return url;
-  };
 
   return (
     <aside

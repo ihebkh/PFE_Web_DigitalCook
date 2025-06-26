@@ -5,29 +5,24 @@ import Dashboard from '../components/Dashboard';
 import CVparsing from '../components/cv-parsing';
 import Sidebar from '../components/Sidebar';
 import EditProfile from '../components/EditProfile';
+import UserList from '../components/UserList';
 import { useAuth } from '../context/authContext';
 import { useTheme } from '../context/themeContext';
 
 function DarkModeWrapper({ children }) {
   const { isDarkMode } = useTheme();
-  return (
-    <div
-      style={{
-        background: isDarkMode ? '#1E2B45' : '#fff',
-        color: isDarkMode ? '#F0F0F0' : '#333',
-        minHeight: '100vh',
-        transition: 'background-color 0.3s, color 0.3s',
-        position: 'relative',
-        zIndex: 1
-      }}
-    >
-      {children}
-    </div>
-  );
+  const mainStyle = {
+    backgroundColor: isDarkMode ? '#1E2B45' : '#fff',
+    color: isDarkMode ? '#fff' : '#000',
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+  };
+  return <div style={mainStyle}>{children}</div>;
 }
 
 export default function AppRouter() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [collapsed, setCollapsed] = React.useState(false);
 
   const toggleSidebar = () => {
@@ -49,6 +44,7 @@ export default function AppRouter() {
             path="/profile"
             element={user ? <EditProfile collapsed={collapsed} /> : <Navigate to="/" />}
           />
+          <Route path="/users" element={user ? <UserList collapsed={collapsed} /> : <Navigate to="/" />} />
           <Route path="/activities" element={user ? <Dashboard /> : <Navigate to="/" />} />
           <Route path="/affaires" element={user ? <Dashboard /> : <Navigate to="/" />} />
           <Route path="/marketplace" element={user ? <Dashboard /> : <Navigate to="/" />} />
