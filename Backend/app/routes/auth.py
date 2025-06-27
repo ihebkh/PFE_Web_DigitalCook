@@ -17,17 +17,21 @@ def create_session_cookie(response: Response, email: str):
         key="session_id",
         value=email,
         httponly=True,
-        secure=False,
+        secure=False,  # False pour le développement local
         samesite="Lax",
         max_age=3600,
+        path="/",  # Ajouter le path
+        domain=None  # Pas de domaine spécifique pour le développement
     )
 
 # Dependency to get current user (reusable)
 def get_current_active_user(session_id: Optional[str] = Cookie(None)):
+    print(f"Session ID from cookie: {session_id}")  # DEBUG
     if not session_id:
         raise HTTPException(status_code=401, detail="Non authentifié")
     _, users_col, _, _, _ = get_mongo_collections()
     user = users_col.find_one({"email": session_id})
+    print(f"User found by email: {user}")  # DEBUG
     if not user:
         raise HTTPException(status_code=401, detail="Utilisateur invalide")
     return user
@@ -42,10 +46,21 @@ def login(user: UserAuth, response: Response):
     
     privilege_id = db_user.get("privilege")
     role_label = None
+    
+    print(f"User privilege ID: {privilege_id}")  # DEBUG
+    
     if privilege_id:
         privilege_doc = privileges_col.find_one({"_id": ObjectId(privilege_id)})
+        print(f"Privilege doc: {privilege_doc}")  # DEBUG
         if privilege_doc:
             role_label = privilege_doc.get("label")
+            print(f"Role label: {role_label}")  # DEBUG
+            # Permettre l'accès aux TopAdmin, commercial, et autres types d'utilisateurs
+            allowed_roles = ["TopAdmin", "commercial", "influenceur", "agence", "apporteur", "topApporteur"]
+            if role_label not in allowed_roles:
+                raise HTTPException(status_code=403, detail="Accès non autorisé")
+    else:
+        raise HTTPException(status_code=403, detail="Aucun privilège associé à cet utilisateur")
     
     create_session_cookie(response, db_user["email"])
     return {

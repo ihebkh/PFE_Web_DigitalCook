@@ -1,12 +1,12 @@
 import React from 'react';
 import logoTalentxpo from '../assets/logo-talentxpo.png';
-import { FaEllipsisV, FaPowerOff, FaUserEdit, FaUserCircle, FaSun, FaMoon, FaUsers } from 'react-icons/fa';
+import { FaEllipsisV, FaPowerOff, FaUserEdit, FaUserCircle, FaSun, FaMoon } from 'react-icons/fa';
 import { useAuth } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTheme } from '../context/themeContext';
 
-export default function Header() {
+export default function CommRecuHeader() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showLogout, setShowLogout] = React.useState(false);
@@ -108,29 +108,6 @@ export default function Header() {
               <FaUserEdit size={18} />
               <span>Mon Profil</span>
             </button>
-            {user.role === 'TopAdmin' && (
-              <button
-                onClick={() => navigate('/users')}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  background: 'transparent',
-                  border: 'none',
-                  color: '#333',
-                  cursor: 'pointer',
-                  fontSize: 16,
-                  fontWeight: 500,
-                  width: '100%',
-                  padding: '10px 16px',
-                  textAlign: 'left',
-                  '&:hover': { background: '#f0f0f0' },
-                }}
-              >
-                <FaUsers size={18} />
-                <span>Utilisateurs</span>
-              </button>
-            )}
             <button
               onClick={toggleTheme}
               style={{

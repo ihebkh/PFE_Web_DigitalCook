@@ -17,7 +17,13 @@ export function AuthProvider({ children }) {
         try {
             const res = await loginService(email, password);
             if (res.status === 'valide') {
-                const loggedUser = { nom: res.nom, prenom: res.prenom, email: res.email, role: res.role, photo_url: res.photo_url };
+                const loggedUser = { 
+                    nom: res.nom, 
+                    prenom: res.prenom, 
+                    email: res.email, 
+                    role: res.role,
+                    photo_url: res.photo_url 
+                };
                 setUser(loggedUser);
                 localStorage.setItem('user', JSON.stringify(loggedUser));
                 return true;
@@ -34,6 +40,7 @@ export function AuthProvider({ children }) {
     };
 
     const logout = async () => {
+        setLoading(true);
         try {
             await logoutService();
         } catch (err) {
@@ -41,6 +48,7 @@ export function AuthProvider({ children }) {
         }
         setUser(null);
         localStorage.removeItem('user');
+        setLoading(false);
     };
 
     const checkSession = async () => {
@@ -49,14 +57,22 @@ export function AuthProvider({ children }) {
         try {
             const currentUser = await getCurrentUser();
             if (currentUser) {
-                setUser(currentUser);
-                localStorage.setItem('user', JSON.stringify(currentUser));
+                // Ajouter le rôle depuis localStorage si pas présent dans la réponse
+                const storedUser = localStorage.getItem('user');
+                const storedUserData = storedUser ? JSON.parse(storedUser) : null;
+                const userWithRole = {
+                    ...currentUser,
+                    role: currentUser.role || storedUserData?.role
+                };
+                setUser(userWithRole);
+                localStorage.setItem('user', JSON.stringify(userWithRole));
             } else {
                 setUser(null);
                 localStorage.removeItem('user');
             }
             return !!currentUser;
         } catch (err) {
+            console.error('Session check failed:', err);
             setUser(null);
             localStorage.removeItem('user');
             return false;
