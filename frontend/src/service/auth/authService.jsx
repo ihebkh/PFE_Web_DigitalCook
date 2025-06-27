@@ -49,3 +49,16 @@ export async function uploadProfilePhoto(file) {
   });
   return res.data.photo_url;
 }
+
+export async function analyseCv(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  try {
+    const res = await axios.post(`${api_url}/analyse/analyse-cv`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return res.data;
+  } catch (err) {
+    throw new Error(err.response?.data?.detail || "Erreur lors de l'analyse du CV");
+  }
+}

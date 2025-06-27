@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../components/Login';
 import Dashboard from '../components/Dashboard';
-import CVparsing from '../components/cv-parsing';
+// import CVparsing from '../components/cv-parsing';
 import Sidebar from '../components/Sidebar';
 import CommRecuSidebar from '../components/CommRecuSidebar';
 import Header from '../components/Header';
@@ -14,6 +14,7 @@ import Recruteur from '../components/Recruteur';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useAuth } from '../context/authContext';
 import { useTheme } from '../context/themeContext';
+import CvAnalyse from '../components/CvAnalyse';
 
 function DarkModeWrapper({ children }) {
   const { isDarkMode } = useTheme();
@@ -79,7 +80,7 @@ export default function AppRouter() {
             path="/dashboard"
             element={user ? <Dashboard collapsed={collapsed} /> : <Navigate to="/" />}
           />
-          <Route path="/cv-parsing" element={user ? <CVparsing collapsed={collapsed} /> : <Navigate to="/" />} />
+          {/* <Route path="/cv-parsing" element={user ? <CVparsing collapsed={collapsed} /> : <Navigate to="/" />} /> */}
           <Route
             path="/profile"
             element={user ? <EditProfile collapsed={collapsed} /> : <Navigate to="/" />}
@@ -92,6 +93,7 @@ export default function AppRouter() {
           <Route path="/marketplace" element={user ? <Dashboard /> : <Navigate to="/" />} />
           <Route path="/settings" element={user ? <Dashboard /> : <Navigate to="/" />} />
           <Route path="/referral" element={user ? <Dashboard /> : <Navigate to="/" />} />
+          <Route path="/analyse-cv" element={user ? <CvAnalyse /> : <Navigate to="/" />} />
         </Routes>
       </DarkModeWrapper>
     </BrowserRouter>
