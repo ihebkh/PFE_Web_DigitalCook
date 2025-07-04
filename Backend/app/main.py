@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth
-from app.routes import analyse
 from fastapi.staticfiles import StaticFiles
+from app.Controllers import auth
+from app.Controllers import analyse
+from app.Databases.mongo import get_mongo_collections
 
 app = FastAPI()
 

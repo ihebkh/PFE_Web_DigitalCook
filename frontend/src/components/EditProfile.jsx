@@ -1,11 +1,17 @@
+// EditProfile.jsx
+// Composant d'édition du profil utilisateur (infos, mot de passe, photo)
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/authContext';
 import { useTheme } from '../context/themeContext';
 import { uploadProfilePhoto } from '../service/auth/authService';
 
+/**
+ * Composant permettant à l'utilisateur de modifier son profil (nom, email, mot de passe, photo).
+ */
 export default function EditProfile({ collapsed }) {
   const { user, updateUser } = useAuth();
   const { isDarkMode } = useTheme();
+  // États principaux
   const [firstName, setFirstName] = useState(user?.prenom || '');
   const [lastName, setLastName] = useState(user?.nom || '');
   const [email, setEmail] = useState(user?.email || '');
@@ -34,13 +40,12 @@ export default function EditProfile({ collapsed }) {
     }
     return 0;
   };
-
   const marginLeft = getMarginLeft();
 
+  // Met à jour le profil utilisateur
   const handleUpdate = async () => {
     setInternalLoading(true);
     setMessage('');
-    
     try {
       const updateData = {
         name: firstName,
@@ -48,7 +53,6 @@ export default function EditProfile({ collapsed }) {
         email: email,
         photo_url: photoUrl
       };
-
       if (showPasswordChangeFields) {
         if (newPassword !== confirmNewPassword) {
           setMessage('Les mots de passe ne correspondent pas');
@@ -57,7 +61,6 @@ export default function EditProfile({ collapsed }) {
         updateData.current_password = currentPassword;
         updateData.new_password = newPassword;
       }
-
       const success = await updateUser(updateData);
       if (success) {
         setMessage('Profil mis à jour avec succès');
@@ -73,6 +76,7 @@ export default function EditProfile({ collapsed }) {
     }
   };
 
+  // Upload et mise à jour de la photo de profil
   const handlePhotoChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -86,12 +90,14 @@ export default function EditProfile({ collapsed }) {
     }
   };
 
+  // Retourne l'URL de la photo (gère le cas local/uploads)
   const getPhotoSrc = (url) => {
     if (!url) return 'https://i.pravatar.cc/150?u=default';
     if (url.startsWith('/uploads/')) return 'http://localhost:8000' + url;
     return url;
   };
 
+  // Styles principaux
   const containerStyle = {
     marginLeft: marginLeft,
     marginTop: 64,
@@ -103,7 +109,6 @@ export default function EditProfile({ collapsed }) {
     background: isDarkMode ? '#1E2B45' : '#fff',
     color: isDarkMode ? '#F0F0F0' : '#333',
   };
-
   const cardStyle = {
     background: isDarkMode ? '#2A354D' : '#fff',
     border: `1px solid ${isDarkMode ? '#404B60' : '#eee'}`,
@@ -113,7 +118,6 @@ export default function EditProfile({ collapsed }) {
     margin: '0 auto',
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
   };
-
   const inputStyle = {
     width: '100%',
     padding: '12px 16px',
@@ -124,7 +128,6 @@ export default function EditProfile({ collapsed }) {
     fontSize: 16,
     marginBottom: 16,
   };
-
   const buttonStyle = {
     background: '#0D52CE',
     color: '#fff',
@@ -135,7 +138,6 @@ export default function EditProfile({ collapsed }) {
     cursor: 'pointer',
     marginTop: 16,
   };
-
   const labelStyle = {
     display: 'block',
     marginBottom: 8,
@@ -143,6 +145,7 @@ export default function EditProfile({ collapsed }) {
     color: isDarkMode ? '#F0F0F0' : '#333',
   };
 
+  // Rendu principal
   return (
     <div style={containerStyle}>
       <div style={cardStyle}>
@@ -150,6 +153,7 @@ export default function EditProfile({ collapsed }) {
           Modifier le profil
         </h2>
 
+        {/* Message de succès ou d'erreur */}
         {message && (
           <div style={{
             padding: 12,
@@ -162,6 +166,7 @@ export default function EditProfile({ collapsed }) {
           </div>
         )}
 
+        {/* Champs de saisie du profil */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
           <div>
             <label style={labelStyle}>Prénom</label>
@@ -193,6 +198,7 @@ export default function EditProfile({ collapsed }) {
           />
         </div>
 
+        {/* Photo de profil */}
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <img
@@ -229,6 +235,7 @@ export default function EditProfile({ collapsed }) {
           </div>
         </div>
 
+        {/* Checkbox pour afficher les champs de changement de mot de passe */}
         <div style={{ marginBottom: 16 }}>
           <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <input
@@ -241,6 +248,7 @@ export default function EditProfile({ collapsed }) {
           </label>
         </div>
 
+        {/* Champs de changement de mot de passe */}
         {showPasswordChangeFields && (
           <div style={{ marginBottom: 16 }}>
             <label style={labelStyle}>Mot de passe actuel</label>
@@ -295,6 +303,7 @@ export default function EditProfile({ collapsed }) {
           </div>
         )}
 
+        {/* Bouton d'enregistrement */}
         <div style={{ textAlign: 'right' }}>
           <button
             onClick={handleUpdate}

@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
                 localStorage.setItem('user', JSON.stringify(loggedUser));
                 return true;
             } else {
-                setError("Échec de l'authentification. Vérifiez vos identifiants.");
+                setError(res.detail || "Échec de l'authentification. Vérifiez vos identifiants.");
                 return false;
             }
         } catch (err) {

@@ -1,13 +1,15 @@
+// Sidebar.jsx
+// Composant de barre latérale pour la navigation principale de l'application
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import menuIcon from '../assets/menu.png';
-import { FaChevronLeft, FaBriefcase, FaTachometerAlt, FaClipboardList, FaBuilding, FaStore, FaCog, FaHandshake, FaSun, FaMoon, FaUsers } from 'react-icons/fa';
+import { FaChevronLeft, FaBriefcase, FaTachometerAlt, FaClipboardList, FaBuilding, FaStore, FaCog, FaHandshake, FaSun, FaMoon } from 'react-icons/fa';
 import { useTheme } from '../context/themeContext';
 import { useAuth } from '../context/authContext';
 
+// Définition des éléments de la sidebar (label, icône, chemin, rôles autorisés)
 const sidebarItems = [
   { label: 'Dashboard', icon: <FaTachometerAlt />, path: '/dashboard', roles: ['TopAdmin'] },
-  { label: 'Talentxpo', icon: <FaBriefcase />, path: '/cv-parsing', roles: ['TopAdmin'] },
   { label: 'Analyse CV', icon: <FaClipboardList />, path: '/analyse-cv', roles: ['TopAdmin'] },
   { label: 'Activités', icon: <FaClipboardList />, path: '/activities', roles: ['TopAdmin'] },
   { label: 'Affaires', icon: <FaBuilding />, path: '/affaires', roles: ['TopAdmin'] },
@@ -16,6 +18,10 @@ const sidebarItems = [
   { label: 'Parrainage', icon: <FaHandshake />, path: '/referral', roles: ['TopAdmin'] },
 ];
 
+/**
+ * Composant de barre latérale pour la navigation principale.
+ * Affiche les liens selon le rôle de l'utilisateur et permet de changer le thème.
+ */
 export default function Sidebar({ collapsed, toggleSidebar }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,6 +54,7 @@ export default function Sidebar({ collapsed, toggleSidebar }) {
         minHeight: 0,
       }}
     >
+      {/* Bouton pour ouvrir/réduire la sidebar */}
       <button
         onClick={toggleSidebar}
         style={{
@@ -72,6 +79,7 @@ export default function Sidebar({ collapsed, toggleSidebar }) {
         )}
       </button>
 
+      {/* Liens de navigation */}
       {filteredSidebarItems.map((item) => (
         <button
           key={item.label}
@@ -103,6 +111,7 @@ export default function Sidebar({ collapsed, toggleSidebar }) {
         </button>
       ))}
 
+      {/* Bouton pour changer le thème (clair/sombre) */}
       <button
         onClick={toggleTheme}
         style={{
@@ -131,9 +140,8 @@ export default function Sidebar({ collapsed, toggleSidebar }) {
         {!collapsed && <span style={{ marginLeft: 12 }}>{isDarkMode ? 'Mode Clair' : 'Mode Sombre'}</span>}
       </button>
 
-      <div style={{ width: '100%' }}>
-        {/* Remove user display and logout button */}
-      </div>
+      {/* Espace réservé pour d'autres éléments éventuels */}
+      <div style={{ width: '100%' }} />
     </aside>
   );
 }

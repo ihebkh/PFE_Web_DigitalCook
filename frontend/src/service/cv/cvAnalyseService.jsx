@@ -1,3 +1,9 @@
+// cvAnalyseService.jsx
+// Service pour l'analyse de CV (upload PDF)
+
+/**
+ * Analyse un CV PDF en l'envoyant à l'API backend.
+ */
 export async function analyseCv(file) {
   const formData = new FormData();
   formData.append('file', file);

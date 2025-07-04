@@ -1,9 +1,12 @@
+// CommRecuSidebar.jsx
+// Composant de barre latérale pour la navigation des utilisateurs commerciaux/recruteurs
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import menuIcon from '../assets/menu.png';
 import { FaChevronLeft, FaBriefcase, FaTachometerAlt, FaClipboardList, FaBuilding, FaStore, FaCog, FaHandshake, FaSun, FaMoon } from 'react-icons/fa';
 import { useTheme } from '../context/themeContext';
 
+// Définition des éléments de la sidebar utilisateur
 const userSidebarItems = [
   { label: 'Dashboard', icon: <FaTachometerAlt />, path: '/dashboard' },
   { label: 'Talentxpo', icon: <FaBriefcase />, path: '/cv-parsing' },
@@ -14,6 +17,9 @@ const userSidebarItems = [
   { label: 'Parrainage', icon: <FaHandshake />, path: '/referral' },
 ];
 
+/**
+ * Composant de barre latérale pour la navigation des utilisateurs commerciaux/recruteurs.
+ */
 export default function CommRecuSidebar({ collapsed, toggleSidebar }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,6 +46,7 @@ export default function CommRecuSidebar({ collapsed, toggleSidebar }) {
         minHeight: 0,
       }}
     >
+      {/* Bouton pour ouvrir/réduire la sidebar */}
       <button
         onClick={toggleSidebar}
         style={{
@@ -64,6 +71,7 @@ export default function CommRecuSidebar({ collapsed, toggleSidebar }) {
         )}
       </button>
 
+      {/* Liens de navigation */}
       {userSidebarItems.map((item) => (
         <button
           key={item.label}
@@ -95,6 +103,7 @@ export default function CommRecuSidebar({ collapsed, toggleSidebar }) {
         </button>
       ))}
 
+      {/* Bouton pour changer le thème (clair/sombre) */}
       <button
         onClick={toggleTheme}
         style={{
@@ -123,9 +132,8 @@ export default function CommRecuSidebar({ collapsed, toggleSidebar }) {
         {!collapsed && <span style={{ marginLeft: 12 }}>{isDarkMode ? 'Mode Clair' : 'Mode Sombre'}</span>}
       </button>
 
-      <div style={{ width: '100%' }}>
-        {/* Remove user display and logout button */}
-      </div>
+      {/* Espace réservé pour d'autres éléments éventuels */}
+      <div style={{ width: '100%' }} />
     </aside>
   );
 } 

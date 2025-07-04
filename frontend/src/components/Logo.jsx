@@ -1,5 +1,10 @@
+// Logo.jsx
+// Composant d'affichage du logo principal de l'application
 import React from 'react';
 
+/**
+ * Composant d'affichage du logo principal de l'application.
+ */
 export default function Logo() {
   return (
     <div style={{ textAlign: 'center', marginBottom: 32 }}>

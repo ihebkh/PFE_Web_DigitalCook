@@ -1,15 +1,20 @@
-
+// LoginForm.jsx
+// Composant de formulaire de connexion utilisateur
 import React, { useState } from 'react';
 import { useAuth } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+/**
+ * Formulaire de connexion utilisateur (email, mot de passe).
+ */
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, loading, error } = useAuth();
   const navigate = useNavigate();
 
+  // Gère la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
     const success = await login({ email, password });
@@ -21,6 +26,7 @@ export default function LoginForm() {
     }
   };
 
+  // Rendu principal
   return (
     <form onSubmit={handleSubmit}>
       <div style={{ marginBottom: 18 }}>

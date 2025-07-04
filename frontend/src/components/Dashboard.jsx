@@ -1,15 +1,20 @@
+// Dashboard.jsx
+// Composant d'affichage du tableau de bord PowerBI
 import React from 'react';
 import Header from './Header';
 import { useTheme } from '../context/themeContext';
 
+/**
+ * Composant principal pour l'affichage du dashboard PowerBI.
+ */
 export default function Dashboard({ collapsed }) {
   const marginLeft = collapsed ? 90 : 270;
   const { isDarkMode } = useTheme();
 
+  // Rendu principal
   return (
     <div>
       <Header />
-
       <main style={{
         marginLeft: marginLeft,
         marginTop: 64,
@@ -21,6 +26,7 @@ export default function Dashboard({ collapsed }) {
         background: isDarkMode ? '#1E2B45' : '#fff',
         color: isDarkMode ? '#F0F0F0' : '#333',
       }}>
+        {/* Iframe PowerBI */}
         <iframe 
           title="Dashboard" 
           style={{ width: '100%', height: '100%' }}

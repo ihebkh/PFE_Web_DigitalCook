@@ -1,5 +1,8 @@
+// Button.jsx
+// Composant bouton stylisé réutilisable
 import styled from 'styled-components';
 
+// Bouton stylisé avec styled-components
 const Btn = styled.button`
   width: 100%;
   padding: 14px 0;
@@ -17,6 +20,9 @@ const Btn = styled.button`
   &:disabled { background: #f5b33599; cursor: not-allowed; }
 `;
 
+/**
+ * Composant bouton stylisé réutilisable.
+ */
 export default function Button({ children, ...props }) {
   return <Btn {...props}>{children}</Btn>;
 }

@@ -1,3 +1,5 @@
+// CvAnalyse.jsx
+// Composant d'analyse de CV (upload PDF, affichage résultats, UX optimisée)
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Box, Typography, Paper, Button, CircularProgress, Grid, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Divider } from '@mui/material';
@@ -6,7 +8,11 @@ import { useTheme } from '../context/themeContext';
 import Header from './Header';
 import { analyseCv } from '../service/cv/cvAnalyseService';
 
+/**
+ * Composant principal pour l'analyse de CV (upload PDF, affichage des résultats d'analyse)
+ */
 const CvAnalyse = ({ collapsed }) => {
+  // États principaux
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -14,6 +20,7 @@ const CvAnalyse = ({ collapsed }) => {
   const { isDarkMode } = useTheme();
   const marginLeft = collapsed ? 90 : 270;
 
+  // Gestion du drag & drop de fichiers
   const onDrop = useCallback((acceptedFiles) => {
     setSelectedFiles(prev => [...prev, ...acceptedFiles]);
     setResult(null);
@@ -25,10 +32,12 @@ const CvAnalyse = ({ collapsed }) => {
     accept: { 'application/pdf': ['.pdf'] }
   });
 
+  // Supprime un fichier sélectionné
   const removeFile = (index) => {
     setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
+  // Lance l'analyse du CV
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
     setLoading(true);
@@ -44,6 +53,7 @@ const CvAnalyse = ({ collapsed }) => {
     }
   };
 
+  // Rendu principal
   return (
     <div>
       <Header />
@@ -59,6 +69,7 @@ const CvAnalyse = ({ collapsed }) => {
         color: isDarkMode ? '#F0F0F0' : '#333',
       }}>
         <Typography variant="h4" gutterBottom>Analyse de CV</Typography>
+        {/* Zone de drop et sélection de fichier */}
         <Paper sx={{ p: 3, mb: 3, background: isDarkMode ? '#2A354D' : '#fff', color: isDarkMode ? '#F0F0F0' : '#333' }}>
           <Box
             {...getRootProps()}
@@ -86,6 +97,7 @@ const CvAnalyse = ({ collapsed }) => {
             )}
           </Box>
 
+          {/* Affichage du fichier sélectionné */}
           {selectedFiles.length > 0 && (
             <Box sx={{ mt: 2 }}>
               <Typography variant="subtitle1" gutterBottom sx={{ color: isDarkMode ? '#F0F0F0' : '#333' }}>
@@ -120,6 +132,7 @@ const CvAnalyse = ({ collapsed }) => {
             </Box>
           )}
 
+          {/* Bouton d'analyse */}
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: selectedFiles.length > 0 ? 2 : 0 }}>
             <Button
               variant="contained"
@@ -139,22 +152,26 @@ const CvAnalyse = ({ collapsed }) => {
           </Box>
         </Paper>
 
+        {/* Loader */}
         {loading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
             <CircularProgress size={50} sx={{ color: isDarkMode ? '#F0F0F0' : '#1976d2' }} />
           </Box>
         )}
 
+        {/* Affichage erreur */}
         {error && (
           <Box sx={{ color: 'red', mt: 2, textAlign: 'center' }}>{error}</Box>
         )}
 
+        {/* Résultats d'analyse */}
         {result && (
           <Box sx={{ mt: 3 }}>
             <Typography variant="h5" gutterBottom sx={{ color: isDarkMode ? '#F0F0F0' : '#333' }}>
               Résultats d'analyse
             </Typography>
             <Paper sx={{ p: 2, mb: 2, background: isDarkMode ? '#2A354D' : '#fff' }}>
+              {/* Compétences détectées */}
               <Typography variant="subtitle1" sx={{ mb: 1 }}><b>Compétences détectées</b></Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
                 {result.competences && result.competences.map((c, i) => (
@@ -162,6 +179,7 @@ const CvAnalyse = ({ collapsed }) => {
                 ))}
               </Box>
               <Divider sx={{ my: 2 }} />
+              {/* Expériences */}
               <Typography variant="subtitle1" sx={{ mb: 1 }}><b>Expériences</b></Typography>
               <ul style={{ marginBottom: 16 }}>
                 {result.experiences && result.experiences.map((exp, i) => (
@@ -169,11 +187,14 @@ const CvAnalyse = ({ collapsed }) => {
                 ))}
               </ul>
               <Divider sx={{ my: 2 }} />
+              {/* Pays détectés */}
               <Typography variant="subtitle1" sx={{ mb: 1 }}><b>Pays détectés</b></Typography>
               <Typography sx={{ mb: 2 }}>{result.pays && result.pays.join(", ")}</Typography>
+              {/* Durée d'expérience */}
               <Typography variant="subtitle1" sx={{ mb: 1 }}><b>Durée d'expérience</b></Typography>
               <Typography sx={{ mb: 2 }}>{result.duree_experience}</Typography>
               <Divider sx={{ my: 2 }} />
+              {/* Offres correspondantes */}
               <Typography variant="subtitle1" sx={{ mb: 1 }}><b>Offres correspondantes</b></Typography>
               {result.matches && result.matches.length > 0 ? (
                 <TableContainer component={Paper} sx={{ mt: 2, background: isDarkMode ? '#22304a' : '#fff' }}>

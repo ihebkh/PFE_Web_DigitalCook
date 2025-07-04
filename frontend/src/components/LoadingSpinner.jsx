@@ -1,5 +1,10 @@
+// LoadingSpinner.jsx
+// Composant d'affichage d'un écran de chargement animé
 import React from 'react';
 
+/**
+ * Composant de spinner animé pour indiquer un chargement global.
+ */
 const LoadingSpinner = () => {
   return (
     <div style={{
@@ -56,6 +61,7 @@ const LoadingSpinner = () => {
         }}></div>
       </div>
 
+      {/* Styles d'animation CSS */}
       <style>
         {`
           @keyframes spin {

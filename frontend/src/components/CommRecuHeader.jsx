@@ -1,3 +1,5 @@
+// CommRecuHeader.jsx
+// Composant d'en-tête pour les utilisateurs commerciaux/recruteurs
 import React from 'react';
 import logoTalentxpo from '../assets/logo-talentxpo.png';
 import { FaEllipsisV, FaPowerOff, FaUserEdit, FaUserCircle, FaSun, FaMoon } from 'react-icons/fa';
@@ -6,24 +8,31 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTheme } from '../context/themeContext';
 
+/**
+ * Composant d'en-tête pour les utilisateurs commerciaux/recruteurs.
+ * Affiche le logo, l'utilisateur connecté, le menu profil/thème/déconnexion.
+ */
 export default function CommRecuHeader() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showLogout, setShowLogout] = React.useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
 
+  // Déconnexion utilisateur
   const handleLogout = () => {
     logout();
     toast.info('Déconnexion réussie.');
     navigate('/');
   };
 
+  // Retourne l'URL de la photo (gère le cas local/uploads)
   const getPhotoSrc = (url) => {
     if (!url) return 'https://i.pravatar.cc/150?u=default';
     if (url.startsWith('/uploads/')) return 'http://localhost:8000' + url;
     return url;
   };
 
+  // Rendu principal
   return (
     <header style={{
       height: 64,
@@ -39,10 +48,12 @@ export default function CommRecuHeader() {
       right: 0,
       zIndex: 100
     }}>
+      {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
         <img src={logoTalentxpo} alt="talentxpo" style={{ height: 40, objectFit: 'contain' }} />
       </div>
       <div style={{ position: 'relative' }}>
+        {/* Bouton utilisateur (avatar + menu) */}
         {user && (
           <button
             onClick={() => setShowLogout(!showLogout)}
@@ -73,6 +84,7 @@ export default function CommRecuHeader() {
           </button>
         )}
 
+        {/* Menu déroulant profil/thème/déconnexion */}
         {showLogout && (
           <div
             style={{
@@ -153,6 +165,7 @@ export default function CommRecuHeader() {
           </div>
         )}
 
+        {/* Overlay pour fermer le menu en cliquant à l'extérieur */}
         {showLogout && (
           <div
             onClick={() => setShowLogout(false)}

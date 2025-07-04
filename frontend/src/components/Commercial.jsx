@@ -1,5 +1,10 @@
+// Commercial.jsx
+// Composant d'accueil pour le tableau de bord commercial
 import React from 'react';
 
+/**
+ * Composant d'accueil pour le tableau de bord commercial.
+ */
 const Commercial = ({ collapsed }) => {
   return (
     <div className={`flex-1 p-6 ${collapsed ? 'ml-16' : 'ml-64'} transition-all duration-300`}>
